@@ -1,3 +1,4 @@
+
 window.customElements.define(
   'movie-card',
   class component extends HTMLElement {
@@ -61,6 +62,7 @@ window.customElements.define(
     #formCard.flip .formFront {
       z-index: 900;
       transform: rotateY(180deg);
+      
     }
     
     .formBack {
@@ -77,6 +79,8 @@ window.customElements.define(
       transform-style: preserve-3d;
       backface-visibility: hidden;
       box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.2);
+      border: solid 1px #3b4e62;
+      border-radius: 5px;
     }
 
     .formBack .content {
@@ -105,6 +109,10 @@ window.customElements.define(
     font-weight: 300;
     color: rgb(230, 230, 230);
    }
+   .overview p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+   }
 
     
     #formCard.flip .formBack{
@@ -112,29 +120,77 @@ window.customElements.define(
       background-color: rgb(30, 40, 50);
       z-index: 1000;
       transform: rotateY(0deg);
+      
     }
 
     .scroll-overflow {
-      height: 150px;
+      height: 118px;
       overflow: scroll;
+      border-bottom: solid 1px #3b4e62;
+    }
+    .year-and-runtime {
+      display: inline-flex;
+    }
+    .year-wrap {
+      width: 80px;
+    }
+    .top-btn-layer {
+      position: absolute;
+      top: -5px;
+      right: 0px;
+      z-index: 100;
+    }
+    .overlay {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+      position: absolute;
+      background: black;
+      opacity: 0;
+      transition: all 700ms;
+      -webkit-backface-visibility: hidden;
+    }
+    .overlay:hover {
+      
+      opacity: 0.5;
+      transition: all 700ms;
+      -webkit-backface-visibility: hidden;
+  
     }
       </style>
 
 
     <section id="formCard">
-      <div class="formFront">
-        <img src=${this.getAttribute('poster')}  width="300" >
-      </div>
+        <div class="formFront">
+          <div class="overlay"></div>
+          <img src=${this.getAttribute('poster')}  width="300" >
+        </div>
+      
 
       <div class="formBack">
-        
+
+          <div class="top-btn-layer">
+            <bookmark-btn></bookmark-btn>
+          </div>
+
             <div class="content">
               <h1 class="title"><a href="#">${this.getAttribute('title')}</a></h1>
               <div class="year-runtime">
-              <p>Year: ${this.getAttribute('year')}</p>
-              <p>Runtime: ${this.getAttribute('runtime')}</p>
+              <p>Director: </p>
+
+              <div class="year-and-runtime">
+                <div class="year-wrap">
+                  <p>Year: ${this.getAttribute('year')}</p>
+                </div>
+                <div class="runtime-wrap">  
+                  <p>Runtime: ${this.getAttribute('runtime')}</p>
+                </div>
               </div>
-              <star-rating rating=${this.getAttribute('rating')}></star-rating>
+              
+              </div>
+              
+              <halfstar-rating rating=${this.getAttribute('rating')}></halfstar-rating>
+              
               <div class="overview">
                 <p>Overview</p>
                 <div class="scroll-overflow">
@@ -145,7 +201,7 @@ window.customElements.define(
             </div>
        
       </div>
-    </section>   
+    </section>  
  
       `;
     }
@@ -155,7 +211,7 @@ window.customElements.define(
     };
     connectedCallback() {
       this.shadowRoot.querySelector(".formFront").addEventListener('click', () => this.flip_card())
-      this.shadowRoot.querySelector(".formBack").addEventListener('click', () => this.flip_card())
+      this.shadowRoot.querySelector(".content").addEventListener('click', () => this.flip_card())
     }   
   }
 );
